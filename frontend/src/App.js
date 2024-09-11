@@ -1,6 +1,6 @@
 import React from 'react';
 import EChartsGraph from './components/EChartsGraph';
-import './src/styles/App.css';
+import './styles/App.css';
 
 function App() {
   return (
