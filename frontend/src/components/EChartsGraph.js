@@ -58,6 +58,12 @@ const EChartsGraph = () => {
       chart.setOption(newOption);
     };
 
+    // Add passive wheel event listener
+    const handleWheel = (event) => {
+      // Your wheel event handling logic here
+    };
+    chartRef.current.addEventListener('wheel', handleWheel, { passive: true });
+
     const option = {
       title: {
         text: "Office Ecosystem",
