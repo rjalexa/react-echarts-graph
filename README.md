@@ -1,6 +1,6 @@
 # eCharts React Graph Demo with FastAPI Backend
 
-This project demonstrates an advanced React application using Apache eCharts to create an interactive force-directed graph, with a FastAPI backend for serving graph data.
+This project demonstrates an advanced React application using Apache eCharts to create an interactive force-directed graph, with a FastAPI backend for data persistence.
 
 ## Project Structure
 
@@ -8,25 +8,24 @@ This project demonstrates an advanced React application using Apache eCharts to 
 project-root/
 │
 ├── frontend/
-│   ├── public/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── EChartsGraph.js
-│   │   │   └── EditNodeModal.js
+│   │   │   ├── EditNodeModal.js
+│   │   │   └── EditLinkModal.js
 │   │   ├── data/
 │   │   │   └── graphData.js
-│   │   ├── App.js
-│   │   ├── App.css
-│   │   └── index.js
+│   │   ├── styles/
+│   │   │   └── App.css
+│   │   └── App.js
+│   ├── public/
 │   ├── package.json
 │   └── package-lock.json
 │
 ├── backend/
 │   ├── main.py
-│   ├── graph_data.py
 │   └── pyproject.toml
 │
-├── .gitignore
 ├── README.md
 └── LICENSE
 ```
@@ -65,7 +64,7 @@ Before you begin, ensure you have met the following requirements:
 1. Start the backend server:
    ```
    cd backend
-   poetry run uvicorn main:app --reload
+   poetry run uvicorn main:app --reload --log-level debug
    ```
    This will start the FastAPI server at `http://localhost:8000`
 
@@ -74,42 +73,63 @@ Before you begin, ensure you have met the following requirements:
    cd frontend
    npm start
    ```
-   This will start the React app at `http://localhost:3000`
 
 3. Open your web browser and visit:
    ```
    http://localhost:3000
    ```
 
-You should now see the interactive graph demo displayed in your browser, with data served from the FastAPI backend.
+You should now see the interactive graph demo displayed in your browser.
 
 ## Features
 
-- Force-directed graph layout representing various web technologies
-- Dynamic node coloring based on technology groups
+- Force-directed graph layout representing an office ecosystem
+- Dynamic node coloring based on group categories (employee, resource, event)
 - Interactive draggable nodes
+- Zoom and pan functionality
+- Legend for filtering nodes by group, with hover and click functions
+- Group names are dynamically built when reading the input data
 - Hover effects to highlight connected nodes and edges
-- Double-click functionality to edit node properties
-- Modal dialog for editing node name and group
+- Double-click functionality to edit node and link properties
+- Modal dialogs for editing node and link details
 - Automatic color updates when changing a node's group
 - Smooth animations for graph updates
 - Responsive design
+- Data persistence through FastAPI backend
 
 ## Customization
 
 ### Modifying Graph Data
 
-To add or modify nodes and links, edit the `backend/graph_data.py` file.
+Initial graph data is stored in `frontend/src/data/graphData.js`. For persistent changes, use the edit functionality in the UI, which communicates with the backend.
 
 ### Changing Node Colors
 
-Node colors are defined by CSS variables in `frontend/src/App.css`. To change a group's color, modify the corresponding CSS variable.
+Node colors are defined in the `groupColors` object in `frontend/src/components/EChartsGraph.js`. To change a group's color, modify the corresponding color value.
 
-### Adding New Technology Groups
+## Component Details
 
-1. Add a new color variable in `frontend/src/App.css`
-2. Update the `getColorByGroup` function in `frontend/src/components/EChartsGraph.js`
-3. Add nodes with the new group in `backend/graph_data.py`
+### EChartsGraph
+
+The main component that renders the graph and handles most of the interactivity.
+
+### EditNodeModal
+
+A modal component for editing node properties (name and group).
+
+### EditLinkModal
+
+A modal component for editing link properties (value/label).
+
+## Backend Integration
+
+The application communicates with a FastAPI backend for data retrieval and persistence:
+
+- GET `/api/graph`: Fetches the graph data (currently mocked by reading the JS data file)
+- `handleSaveNode`: Saves updated node data using POST `/api/nodeSave`
+- `handleSaveLink`: Saves updated link data using POST `/api/edgeSave`
+
+Ensure your backend provides these API endpoints.
 
 ## Contributing
 
