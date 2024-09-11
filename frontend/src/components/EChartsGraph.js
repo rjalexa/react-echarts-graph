@@ -38,19 +38,29 @@ const EChartsGraph = () => {
 
     const updateChartVisibility = (visibleGroups, hoveredGroup = null) => {
       const newOption = {
+        legend: {
+          selected: groups.reduce((acc, group) => ({
+            ...acc,
+            [group]: visibleGroups.includes(group)
+          }), {})
+        },
         series: [{
           data: nodes.map(node => ({
             ...node,
             itemStyle: {
-              opacity: hoveredGroup ? (node.group === hoveredGroup ? 1 : 0) : (visibleGroups.includes(node.group) ? 1 : 0.1),
+              opacity: hoveredGroup 
+                ? (node.group === hoveredGroup ? 1 : 0.1) 
+                : (visibleGroups.includes(node.group) ? 1 : 0.1),
               color: getColorByGroup(node.group)
             }
           })),
           links: links.map(link => ({
             ...link,
             lineStyle: {
-              opacity: hoveredGroup ? 0 : (visibleGroups.includes(nodes.find(n => n.id === link.source).group) && 
-                                          visibleGroups.includes(nodes.find(n => n.id === link.target).group) ? 0.7 : 0.1)
+              opacity: hoveredGroup 
+                ? 0.1 
+                : (visibleGroups.includes(nodes.find(n => n.id === link.source).group) && 
+                   visibleGroups.includes(nodes.find(n => n.id === link.target).group) ? 0.7 : 0.1)
             }
           }))
         }]
@@ -58,7 +68,6 @@ const EChartsGraph = () => {
       chart.setOption(newOption);
     };
 
-    // Add passive wheel event listener
     const handleWheel = (event) => {
       // Your wheel event handling logic here
     };
@@ -185,6 +194,9 @@ const EChartsGraph = () => {
 
     window.addEventListener('resize', resizeHandler);
 
+    // Initial visibility update
+    updateChartVisibility(selectedGroups);
+
     return () => {
       chart.dispose();
       window.removeEventListener('resize', resizeHandler);
@@ -245,7 +257,6 @@ const EChartsGraph = () => {
       console.log('Edge saved successfully');
     } catch (error) {
       console.error('Error saving edge:', error);
-      // You might want to show an error message to the user here
       alert(`Failed to save edge: ${error.message}`);
     }
   };
