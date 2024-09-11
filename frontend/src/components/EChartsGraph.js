@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import * as echarts from "echarts";
 import { nodes as initialNodes, links as initialLinks } from '../data/graphData';
 import '../styles/App.css';
@@ -13,7 +13,7 @@ const EChartsGraph = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLink, setSelectedLink] = useState(null);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const groups = [...new Set(initialNodes.map(node => node.group))];
+  const groups = useMemo(() => [...new Set(initialNodes.map(node => node.group))], []);
 
   useEffect(() => {
     const chart = echarts.init(chartRef.current);
@@ -138,7 +138,7 @@ const EChartsGraph = () => {
       chart.dispose();
       window.removeEventListener('resize', resizeHandler);
     };
-  }, [nodes, links, groups]);
+  }, [nodes, links, groups]); // Include groups in the dependency array
 
   const handleSaveNode = (updatedNode) => {
     setNodes(prevNodes => prevNodes.map(node => 
