@@ -1,5 +1,14 @@
 /* App.css */
 
+:root {
+  --edge-label-color: #000000;
+  --python-color: #4B8BBE;
+  --react-color: #61DAFB;
+  --svelte-color: #FF3E00;
+  --styling-color: #38B2AC;
+  --bridging-color: #764ABC;
+}
+
 /* Reset some basic elements */
 body, h1, h2, h3, p {
   margin: 0;
