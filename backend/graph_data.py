@@ -24,6 +24,34 @@ def get_graph_data():
 
     return {"nodes": nodes, "links": links}
 
+def edge_save(edge_data):
+    file_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'src', 'data', 'graphData.js')
+    
+    with open(file_path, 'r') as file:
+        js_code = file.read()
+
+    # Find the links array in the JavaScript code
+    links_match = re.search(r'export const links = \[(.*?)\];', js_code, re.DOTALL)
+    if links_match:
+        links_str = links_match.group(1)
+        links = eval(f"[{links_str}]")
+
+        # Update the matching link
+        for i, link in enumerate(links):
+            if link['source'] == edge_data['source'] and link['target'] == edge_data['target']:
+                links[i]['value'] = edge_data['value']
+                break
+
+        # Convert the updated links back to a JavaScript string
+        updated_links_str = ',\n  '.join([f"{{ source: '{link['source']}', target: '{link['target']}', value: '{link['value']}' }}" for link in links])
+        updated_js_code = js_code.replace(links_str, updated_links_str)
+
+        # Write the updated JavaScript code back to the file
+        with open(file_path, 'w') as file:
+            file.write(updated_js_code)
+    else:
+        raise ValueError("Links array not found in the JavaScript file")
+
 # Test the function
 if __name__ == "__main__":
     data = get_graph_data()

@@ -191,10 +191,27 @@ const EChartsGraph = () => {
     ));
   };
 
-  const handleSaveLink = (updatedLink) => {
-    setLinks(prevLinks => prevLinks.map(link => 
-      link.source === updatedLink.source && link.target === updatedLink.target ? updatedLink : link
-    ));
+  const handleSaveLink = async (updatedLink) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/edgeSave', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedLink),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save edge');
+      }
+
+      setLinks(prevLinks => prevLinks.map(link => 
+        link.source === updatedLink.source && link.target === updatedLink.target ? updatedLink : link
+      ));
+    } catch (error) {
+      console.error('Error saving edge:', error);
+      // You might want to show an error message to the user here
+    }
   };
 
   return (
