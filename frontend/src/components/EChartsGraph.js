@@ -18,18 +18,22 @@ const EChartsGraph = () => {
   useEffect(() => {
     const chart = echarts.init(chartRef.current);
 
-    const getCSSVariable = (variable) => {
-      return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
+    const groupColors = {
+      employee: '#4B8BBE',
+      resource: '#61DAFB',
+      event: '#FF3E00',
     };
 
     const getColorByGroup = (group) => {
-      const colorMap = {
-        employee: '--employee-color',
-        resource: '--resource-color',
-        event: '--event-color',
-      };
-      return getCSSVariable(colorMap[group] || '--default-color');
+      return groupColors[group] || '#999999';
     };
+
+    const legendData = groups.map(group => ({
+      name: group,
+      itemStyle: {
+        color: getColorByGroup(group)
+      }
+    }));
 
     const option = {
       title: {
@@ -42,6 +46,15 @@ const EChartsGraph = () => {
             return `${params.data.source} ${params.data.value} ${params.data.target}`;
           }
           return `${params.data.name} (${params.data.group})`;
+        }
+      },
+      legend: {
+        data: legendData,
+        orient: 'vertical',
+        left: 10,
+        top: 10,
+        textStyle: {
+          color: '#333'
         }
       },
       animationDurationUpdate: 1500,
@@ -71,13 +84,14 @@ const EChartsGraph = () => {
             fontSize: 8,
             show: true,
             formatter: "{c}",
-            color: getCSSVariable('--edge-label-color'),
+            color: '#000000',
           },
           data: nodes.map(node => ({
             ...node,
             itemStyle: { color: getColorByGroup(node.group) }
           })),
           links: links,
+          categories: groups.map(group => ({ name: group })),
           lineStyle: {
             opacity: 0.7,
             width: 1.5,
@@ -108,13 +122,6 @@ const EChartsGraph = () => {
       if (params.dataType === 'node') {
         setSelectedNode(params.data);
         setIsModalOpen(true);
-      }
-    });
-
-    chart.on('dblclick', (params) => {
-      if (params.dataType === 'node') {
-        setSelectedNode(params.data);
-        setIsModalOpen(true);
       } else if (params.dataType === 'edge') {
         setSelectedLink(params.data);
         setIsLinkModalOpen(true);
@@ -131,7 +138,7 @@ const EChartsGraph = () => {
       chart.dispose();
       window.removeEventListener('resize', resizeHandler);
     };
-  }, [nodes, links]);
+  }, [nodes, links, groups]);
 
   const handleSaveNode = (updatedNode) => {
     setNodes(prevNodes => prevNodes.map(node => 
@@ -147,7 +154,7 @@ const EChartsGraph = () => {
 
   return (
     <>
-      <div ref={chartRef} style={{ width: "100%", height: "800px" }} />
+      <div ref={chartRef} style={{ width: "100%", height: "90vh" }} />
       <EditNodeModal 
         node={selectedNode || {}}
         isOpen={isModalOpen}

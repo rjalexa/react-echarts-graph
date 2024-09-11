@@ -1,15 +1,6 @@
 /* App.css */
 
-:root {
-    --edge-label-color: #000000;
-    --employee-color: #4B8BBE;
-    --resource-color: #61DAFB;
-    --event-color: #FF3E00;
-    --default-color: #999999;
-  }
-  
-  /* Existing styles... */
-  
+/* Existing styles... */
   /* Modal styles */
   .modal-overlay {
     position: fixed;
