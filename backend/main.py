@@ -27,9 +27,14 @@ async def read_graph():
 async def save_edge(edge: EdgeUpdate):
     print(f"Received edge update request: {edge}")
     try:
-        edge_save(edge.dict())
+        edge_dict = edge.dict()
+        print(f"Edge data as dictionary: {edge_dict}")
+        edge_save(edge_dict)
         print("Edge saved successfully")
         return {"message": "Edge updated successfully"}
     except Exception as e:
         print(f"Error saving edge: {str(e)}")
+        print(f"Error type: {type(e)}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))

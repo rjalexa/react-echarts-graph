@@ -34,7 +34,13 @@ def edge_save(edge_data):
     links_match = re.search(r'export const links = \[(.*?)\];', js_code, re.DOTALL)
     if links_match:
         links_str = links_match.group(1)
-        links = eval(f"[{links_str}]")
+        links = []
+        for link in re.finditer(r'\{[^}]+\}', links_str):
+            link_dict = {}
+            for pair in re.finditer(r'(\w+):\s*[\'"]?([^\'"}\s]+)[\'"]?', link.group(0)):
+                key, value = pair.groups()
+                link_dict[key] = value
+            links.append(link_dict)
 
         # Update the matching link
         for i, link in enumerate(links):
