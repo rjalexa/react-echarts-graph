@@ -191,10 +191,33 @@ const EChartsGraph = () => {
     };
   }, [nodes, links, groups, selectedGroups]);
 
-  const handleSaveNode = (updatedNode) => {
-    setNodes(prevNodes => prevNodes.map(node => 
-      node.id === updatedNode.id ? updatedNode : node
-    ));
+  const handleSaveNode = async (updatedNode) => {
+    try {
+      console.log('Attempting to save node:', updatedNode);
+      const response = await fetch('http://localhost:8000/api/nodeSave', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedNode),
+      });
+
+      console.log('Response status:', response.status);
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
+
+      if (!response.ok) {
+        throw new Error(`Failed to save node: ${responseData.detail || response.statusText}`);
+      }
+
+      setNodes(prevNodes => prevNodes.map(node => 
+        node.id === updatedNode.id ? updatedNode : node
+      ));
+      console.log('Node saved successfully');
+    } catch (error) {
+      console.error('Error saving node:', error);
+      alert(`Failed to save node: ${error.message}`);
+    }
   };
 
   const handleSaveLink = async (updatedLink) => {

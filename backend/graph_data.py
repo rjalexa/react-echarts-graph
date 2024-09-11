@@ -58,6 +58,40 @@ def edge_save(edge_data):
     else:
         raise ValueError("Links array not found in the JavaScript file")
 
+def node_save(node_data):
+    file_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'src', 'data', 'graphData.js')
+    
+    with open(file_path, 'r') as file:
+        js_code = file.read()
+
+    # Find the nodes array in the JavaScript code
+    nodes_match = re.search(r'export const nodes = \[(.*?)\];', js_code, re.DOTALL)
+    if nodes_match:
+        nodes_str = nodes_match.group(1)
+        nodes = []
+        for node in re.finditer(r'\{[^}]+\}', nodes_str):
+            node_dict = {}
+            for pair in re.finditer(r'(\w+):\s*[\'"]?([^\'"}\s]+)[\'"]?', node.group(0)):
+                key, value = pair.groups()
+                node_dict[key] = value
+            nodes.append(node_dict)
+
+        # Update the matching node
+        for i, node in enumerate(nodes):
+            if node['id'] == node_data['id']:
+                nodes[i] = node_data
+                break
+
+        # Convert the updated nodes back to a JavaScript string
+        updated_nodes_str = ',\n  '.join([f"{{ id: '{node['id']}', name: '{node['name']}', group: '{node['group']}' }}" for node in nodes])
+        updated_js_code = js_code.replace(nodes_str, updated_nodes_str)
+
+        # Write the updated JavaScript code back to the file
+        with open(file_path, 'w') as file:
+            file.write(updated_js_code)
+    else:
+        raise ValueError("Nodes array not found in the JavaScript file")
+
 # Test the function
 if __name__ == "__main__":
     data = get_graph_data()
