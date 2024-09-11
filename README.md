@@ -1,14 +1,18 @@
 # eCharts React Graph Demo
 
-This project demonstrates a simple React application using Apache eCharts to create an interactive force-directed graph. The demo showcases the ability to use URLs as node IDs and arbitrary strings as edge labels.
+This project demonstrates an advanced React application using Apache eCharts to create an interactive force-directed graph. The demo showcases various technologies in the web development ecosystem, their relationships, and provides interactive features for exploring and modifying the graph.
 
 ## Features
 
-- Force-directed graph layout
-- Nodes with URL-based IDs
-- Edges with custom string labels
+- Force-directed graph layout representing various web technologies
+- Dynamic node coloring based on technology groups
 - Interactive draggable nodes
-- Smooth animations
+- Hover effects to highlight connected nodes and edges
+- Double-click functionality to edit node properties
+- Modal dialog for editing node name and group
+- Automatic color updates when changing a node's group
+- Smooth animations for graph updates
+- Responsive design
 
 ## Prerequisites
 
@@ -47,16 +51,38 @@ To run the application locally:
    http://localhost:3000
    ```
 
-You should now see the graph demo displayed in your browser.
+You should now see the interactive graph demo displayed in your browser.
+
+## Interacting with the Graph
+
+- **Pan and Zoom**: Click and drag the background to pan, use the mouse wheel to zoom.
+- **Move Nodes**: Click and drag individual nodes to reposition them.
+- **Hover Effects**: Hover over a node to highlight its connections and fade out unrelated nodes.
+- **Edit Nodes**: Double-click a node to open an edit modal where you can change its name and group.
 
 ## Project Structure
 
 - `src/App.js`: The main React component that renders the application
 - `src/components/EChartsGraph.js`: The React component that initializes and renders the eCharts graph
+- `src/components/EditNodeModal.js`: A modal component for editing node properties
+- `src/data/graphData.js`: Contains the node and link data for the graph
+- `src/App.css`: Styles for the application, including CSS variables for node colors
 
 ## Customization
 
-To modify the graph data or appearance, edit the `option` object in `src/components/EChartsGraph.js`. You can add more nodes, change colors, adjust force parameters, or modify edge properties.
+### Modifying Graph Data
+
+To add or modify nodes and links, edit the `nodes` and `links` arrays in `src/data/graphData.js`.
+
+### Changing Node Colors
+
+Node colors are defined by CSS variables in `src/App.css`. To change a group's color, modify the corresponding CSS variable.
+
+### Adding New Technology Groups
+
+1. Add a new color variable in `src/App.css`
+2. Update the `getColorByGroup` function in `src/components/EChartsGraph.js`
+3. Add nodes with the new group in `src/data/graphData.js`
 
 ## Contributing
 
