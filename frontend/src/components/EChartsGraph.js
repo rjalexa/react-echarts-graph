@@ -20,18 +20,16 @@ const EChartsGraph = () => {
 
     const getColorByGroup = (group) => {
       const colorMap = {
-        python: '--python-color',
-        react: '--react-color',
-        svelte: '--svelte-color',
-        styling: '--styling-color',
-        bridging: '--bridging-color',
+        employee: '--employee-color',
+        resource: '--resource-color',
+        event: '--event-color',
       };
       return getCSSVariable(colorMap[group] || '--default-color');
     };
 
     const option = {
       title: {
-        text: "Technology Ecosystem",
+        text: "Office Ecosystem",
         left: 'center'
       },
       tooltip: {
