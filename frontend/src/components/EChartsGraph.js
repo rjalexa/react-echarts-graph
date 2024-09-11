@@ -97,8 +97,8 @@ const EChartsGraph = () => {
         selected: groups.reduce((acc, group) => ({ ...acc, [group]: true }), {}),
         selectedMode: 'multiple'
       },
-      animationDurationUpdate: 1500,
-      animationEasingUpdate: "quinticInOut",
+      animationDurationUpdate: 300,
+      animationEasingUpdate: "linear",
       series: [
         {
           type: "graph",
