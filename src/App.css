@@ -1,13 +1,46 @@
-import React from 'react';
-import EChartsGraph from './components/EChartsGraph';
+/* App.css */
 
-function App() {
-  return (
-    
-      My ECharts Graph
-      
-    
-  );
+/* Reset some basic elements */
+body, h1, h2, h3, p {
+  margin: 0;
+  padding: 0;
 }
 
-export default App;
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f4f4f4;
+}
+
+.App {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Add some basic styling for the ECharts container */
+.echarts-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .App {
+    padding: 10px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+}
