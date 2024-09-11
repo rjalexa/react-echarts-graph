@@ -1,43 +1,41 @@
 // graphData.js
 
-const getColor = (variable) => `var(${variable})`;
-
 export const nodes = [
   // Python ecosystem
-  { id: "python", name: "Python", itemStyle: { color: getColor('--python-color') } },
-  { id: "django", name: "Django", itemStyle: { color: getColor('--python-color') } },
-  { id: "flask", name: "Flask", itemStyle: { color: getColor('--python-color') } },
-  { id: "fastapi", name: "FastAPI", itemStyle: { color: getColor('--python-color') } },
-  { id: "sqlalchemy", name: "SQLAlchemy", itemStyle: { color: getColor('--python-color') } },
-  { id: "pandas", name: "Pandas", itemStyle: { color: getColor('--python-color') } },
-  { id: "numpy", name: "NumPy", itemStyle: { color: getColor('--python-color') } },
-  { id: "pydantic", name: "Pydantic", itemStyle: { color: getColor('--python-color') } },
+  { id: "python", name: "Python", group: "python" },
+  { id: "django", name: "Django", group: "python" },
+  { id: "flask", name: "Flask", group: "python" },
+  { id: "fastapi", name: "FastAPI", group: "python" },
+  { id: "sqlalchemy", name: "SQLAlchemy", group: "python" },
+  { id: "pandas", name: "Pandas", group: "python" },
+  { id: "numpy", name: "NumPy", group: "python" },
+  { id: "pydantic", name: "Pydantic", group: "python" },
 
   // React ecosystem
-  { id: "react", name: "React", itemStyle: { color: getColor('--react-color') } },
-  { id: "redux", name: "Redux", itemStyle: { color: getColor('--react-color') } },
-  { id: "react-router", name: "React Router", itemStyle: { color: getColor('--react-color') } },
-  { id: "nextjs", name: "Next.js", itemStyle: { color: getColor('--react-color') } },
-  { id: "gatsby", name: "Gatsby", itemStyle: { color: getColor('--react-color') } },
-  { id: "styled-components", name: "Styled Components", itemStyle: { color: getColor('--react-color') } },
+  { id: "react", name: "React", group: "react" },
+  { id: "redux", name: "Redux", group: "react" },
+  { id: "react-router", name: "React Router", group: "react" },
+  { id: "nextjs", name: "Next.js", group: "react" },
+  { id: "gatsby", name: "Gatsby", group: "react" },
+  { id: "styled-components", name: "Styled Components", group: "react" },
 
   // Svelte ecosystem
-  { id: "svelte", name: "Svelte", itemStyle: { color: getColor('--svelte-color') } },
-  { id: "sveltekit", name: "SvelteKit", itemStyle: { color: getColor('--svelte-color') } },
+  { id: "svelte", name: "Svelte", group: "svelte" },
+  { id: "sveltekit", name: "SvelteKit", group: "svelte" },
 
   // Styling
-  { id: "tailwindcss", name: "Tailwind CSS", itemStyle: { color: getColor('--styling-color') } },
-  { id: "sass", name: "Sass", itemStyle: { color: getColor('--styling-color') } },
+  { id: "tailwindcss", name: "Tailwind CSS", group: "styling" },
+  { id: "sass", name: "Sass", group: "styling" },
 
   // Bridging technologies
-  { id: "graphql", name: "GraphQL", itemStyle: { color: getColor('--bridging-color') } },
-  { id: "rest-api", name: "REST API", itemStyle: { color: getColor('--bridging-color') } },
-  { id: "webpack", name: "Webpack", itemStyle: { color: getColor('--bridging-color') } },
-  { id: "babel", name: "Babel", itemStyle: { color: getColor('--bridging-color') } },
-  { id: "typescript", name: "TypeScript", itemStyle: { color: getColor('--bridging-color') } },
-  { id: "docker", name: "Docker", itemStyle: { color: getColor('--bridging-color') } },
-  { id: "jwt", name: "JWT", itemStyle: { color: getColor('--bridging-color') } },
-  { id: "oauth", name: "OAuth", itemStyle: { color: getColor('--bridging-color') } },
+  { id: "graphql", name: "GraphQL", group: "bridging" },
+  { id: "rest-api", name: "REST API", group: "bridging" },
+  { id: "webpack", name: "Webpack", group: "bridging" },
+  { id: "babel", name: "Babel", group: "bridging" },
+  { id: "typescript", name: "TypeScript", group: "bridging" },
+  { id: "docker", name: "Docker", group: "bridging" },
+  { id: "jwt", name: "JWT", group: "bridging" },
+  { id: "oauth", name: "OAuth", group: "bridging" },
 ];
 
 export const links = [

@@ -13,9 +13,20 @@ const EChartsGraph = () => {
       return getComputedStyle(document.documentElement).getPropertyValue(variable).trim();
     };
 
+    const getColorByGroup = (group) => {
+      const colorMap = {
+        python: '--python-color',
+        react: '--react-color',
+        svelte: '--svelte-color',
+        styling: '--styling-color',
+        bridging: '--bridging-color',
+      };
+      return getCSSVariable(colorMap[group] || '--default-color');
+    };
+
     const option = {
       title: {
-        text: "Python and React Ecosystem",
+        text: "Technology Ecosystem",
         left: 'center'
       },
       tooltip: {
@@ -23,7 +34,7 @@ const EChartsGraph = () => {
           if (params.dataType === 'edge') {
             return `${params.data.source} ${params.data.value} ${params.data.target}`;
           }
-          return params.data.name;
+          return `${params.data.name} (${params.data.group})`;
         }
       },
       animationDurationUpdate: 1500,
@@ -57,7 +68,7 @@ const EChartsGraph = () => {
           },
           data: nodes.map(node => ({
             ...node,
-            itemStyle: { color: getCSSVariable(node.itemStyle.color.replace('var(', '').replace(')', '')) }
+            itemStyle: { color: getColorByGroup(node.group) }
           })),
           links: links,
           lineStyle: {
@@ -65,7 +76,6 @@ const EChartsGraph = () => {
             width: 1.5,
             curveness: 0.3,
           },
-          // Add focus, emphasis, and blur settings
           focus: 'adjacency',
           emphasis: {
             focus: 'adjacency',
