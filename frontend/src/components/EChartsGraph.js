@@ -14,6 +14,7 @@ const EChartsGraph = () => {
   const [selectedLink, setSelectedLink] = useState(null);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const groups = useMemo(() => [...new Set(initialNodes.map(node => node.group))], []);
+  const [selectedGroups, setSelectedGroups] = useState(groups);
 
   useEffect(() => {
     const chart = echarts.init(chartRef.current);
@@ -34,6 +35,28 @@ const EChartsGraph = () => {
         color: getColorByGroup(group)
       }
     }));
+
+    const updateChartVisibility = (visibleGroups, hoveredGroup = null) => {
+      const newOption = {
+        series: [{
+          data: nodes.map(node => ({
+            ...node,
+            itemStyle: {
+              opacity: hoveredGroup ? (node.group === hoveredGroup ? 1 : 0) : (visibleGroups.includes(node.group) ? 1 : 0.1),
+              color: getColorByGroup(node.group)
+            }
+          })),
+          links: links.map(link => ({
+            ...link,
+            lineStyle: {
+              opacity: hoveredGroup ? 0 : (visibleGroups.includes(nodes.find(n => n.id === link.source).group) && 
+                                          visibleGroups.includes(nodes.find(n => n.id === link.target).group) ? 0.7 : 0.1)
+            }
+          }))
+        }]
+      };
+      chart.setOption(newOption);
+    };
 
     const option = {
       title: {
@@ -121,76 +144,22 @@ const EChartsGraph = () => {
     chart.setOption(option);
 
     chart.on('legendselectchanged', function (params) {
-      const selectedGroups = Object.entries(params.selected)
+      const newSelectedGroups = Object.entries(params.selected)
         .filter(([_, isSelected]) => isSelected)
         .map(([group]) => group);
-
-      const newOption = {
-        series: [{
-          data: nodes.map(node => ({
-            ...node,
-            itemStyle: {
-              opacity: selectedGroups.includes(node.group) ? 1 : 0.1,
-              color: getColorByGroup(node.group)
-            }
-          })),
-          links: links.map(link => ({
-            ...link,
-            lineStyle: {
-              opacity: selectedGroups.includes(nodes.find(n => n.id === link.source).group) ||
-                       selectedGroups.includes(nodes.find(n => n.id === link.target).group) ? 0.7 : 0.1
-            }
-          }))
-        }]
-      };
-      chart.setOption(newOption);
+      setSelectedGroups(newSelectedGroups);
+      updateChartVisibility(newSelectedGroups);
     });
 
-    // Add mouseover and mouseout events for legend items
     chart.on('mouseover', { seriesIndex: 0 }, function (params) {
       if (params.componentType === 'legend') {
-        const hoveredGroup = params.name;
-        const newOption = {
-          series: [{
-            data: nodes.map(node => ({
-              ...node,
-              itemStyle: {
-                opacity: node.group === hoveredGroup ? 1 : 0.1,
-                color: getColorByGroup(node.group)
-              }
-            })),
-            links: links.map(link => ({
-              ...link,
-              lineStyle: {
-                opacity: 0.1
-              }
-            }))
-          }]
-        };
-        chart.setOption(newOption);
+        updateChartVisibility(selectedGroups, params.name);
       }
     });
 
     chart.on('mouseout', { seriesIndex: 0 }, function (params) {
       if (params.componentType === 'legend') {
-        const newOption = {
-          series: [{
-            data: nodes.map(node => ({
-              ...node,
-              itemStyle: {
-                opacity: 1,
-                color: getColorByGroup(node.group)
-              }
-            })),
-            links: links.map(link => ({
-              ...link,
-              lineStyle: {
-                opacity: 0.7
-              }
-            }))
-          }]
-        };
-        chart.setOption(newOption);
+        updateChartVisibility(selectedGroups);
       }
     });
 
@@ -214,7 +183,7 @@ const EChartsGraph = () => {
       chart.dispose();
       window.removeEventListener('resize', resizeHandler);
     };
-  }, [nodes, links, groups]); // Include groups in the dependency array
+  }, [nodes, links, groups, selectedGroups]);
 
   const handleSaveNode = (updatedNode) => {
     setNodes(prevNodes => prevNodes.map(node => 
