@@ -57,7 +57,7 @@ const EChartsGraph = () => {
           color: '#333'
         },
         selected: groups.reduce((acc, group) => ({ ...acc, [group]: true }), {}),
-        selectedMode: 'single'
+        selectedMode: 'multiple'
       },
       animationDurationUpdate: 1500,
       animationEasingUpdate: "quinticInOut",
@@ -121,26 +121,78 @@ const EChartsGraph = () => {
     chart.setOption(option);
 
     chart.on('legendselectchanged', function (params) {
-      const selectedGroup = params.name;
+      const selectedGroups = Object.entries(params.selected)
+        .filter(([_, isSelected]) => isSelected)
+        .map(([group]) => group);
+
       const newOption = {
         series: [{
           data: nodes.map(node => ({
             ...node,
             itemStyle: {
-              opacity: node.group === selectedGroup ? 1 : 0.1,
+              opacity: selectedGroups.includes(node.group) ? 1 : 0.1,
               color: getColorByGroup(node.group)
             }
           })),
           links: links.map(link => ({
             ...link,
             lineStyle: {
-              opacity: nodes.find(n => n.id === link.source).group === selectedGroup ||
-                       nodes.find(n => n.id === link.target).group === selectedGroup ? 0.7 : 0.1
+              opacity: selectedGroups.includes(nodes.find(n => n.id === link.source).group) ||
+                       selectedGroups.includes(nodes.find(n => n.id === link.target).group) ? 0.7 : 0.1
             }
           }))
         }]
       };
       chart.setOption(newOption);
+    });
+
+    // Add mouseover and mouseout events for legend items
+    chart.on('mouseover', { seriesIndex: 0 }, function (params) {
+      if (params.componentType === 'legend') {
+        const hoveredGroup = params.name;
+        const newOption = {
+          series: [{
+            data: nodes.map(node => ({
+              ...node,
+              itemStyle: {
+                opacity: node.group === hoveredGroup ? 1 : 0.1,
+                color: getColorByGroup(node.group)
+              }
+            })),
+            links: links.map(link => ({
+              ...link,
+              lineStyle: {
+                opacity: nodes.find(n => n.id === link.source).group === hoveredGroup ||
+                         nodes.find(n => n.id === link.target).group === hoveredGroup ? 0.7 : 0.1
+              }
+            }))
+          }]
+        };
+        chart.setOption(newOption);
+      }
+    });
+
+    chart.on('mouseout', { seriesIndex: 0 }, function (params) {
+      if (params.componentType === 'legend') {
+        const newOption = {
+          series: [{
+            data: nodes.map(node => ({
+              ...node,
+              itemStyle: {
+                opacity: 1,
+                color: getColorByGroup(node.group)
+              }
+            })),
+            links: links.map(link => ({
+              ...link,
+              lineStyle: {
+                opacity: 0.7
+              }
+            }))
+          }]
+        };
+        chart.setOption(newOption);
+      }
     });
 
     chart.on('dblclick', (params) => {
