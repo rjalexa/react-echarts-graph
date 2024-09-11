@@ -193,6 +193,7 @@ const EChartsGraph = () => {
 
   const handleSaveLink = async (updatedLink) => {
     try {
+      console.log('Attempting to save edge:', updatedLink);
       const response = await fetch('http://localhost:8000/api/edgeSave', {
         method: 'POST',
         headers: {
@@ -201,16 +202,22 @@ const EChartsGraph = () => {
         body: JSON.stringify(updatedLink),
       });
 
+      console.log('Response status:', response.status);
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
+
       if (!response.ok) {
-        throw new Error('Failed to save edge');
+        throw new Error(`Failed to save edge: ${responseData.detail || response.statusText}`);
       }
 
       setLinks(prevLinks => prevLinks.map(link => 
         link.source === updatedLink.source && link.target === updatedLink.target ? updatedLink : link
       ));
+      console.log('Edge saved successfully');
     } catch (error) {
       console.error('Error saving edge:', error);
       // You might want to show an error message to the user here
+      alert(`Failed to save edge: ${error.message}`);
     }
   };
 

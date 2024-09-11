@@ -25,8 +25,11 @@ async def read_graph():
 
 @app.post("/api/edgeSave")
 async def save_edge(edge: EdgeUpdate):
+    print(f"Received edge update request: {edge}")
     try:
         edge_save(edge.dict())
+        print("Edge saved successfully")
         return {"message": "Edge updated successfully"}
     except Exception as e:
+        print(f"Error saving edge: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
