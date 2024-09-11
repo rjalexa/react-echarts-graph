@@ -1,10 +1,15 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
-import { nodes, links } from '../data/graphData';
+import { nodes as initialNodes, links } from '../data/graphData';
 import '../App.css';
+import EditNodeModal from './EditNodeModal';
 
 const EChartsGraph = () => {
   const chartRef = useRef(null);
+  const [nodes, setNodes] = useState(initialNodes);
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const groups = [...new Set(initialNodes.map(node => node.group))];
 
   useEffect(() => {
     const chart = echarts.init(chartRef.current);
@@ -97,6 +102,13 @@ const EChartsGraph = () => {
 
     chart.setOption(option);
 
+    chart.on('dblclick', (params) => {
+      if (params.dataType === 'node') {
+        setSelectedNode(params.data);
+        setIsModalOpen(true);
+      }
+    });
+
     const resizeHandler = () => {
       chart.resize();
     };
@@ -107,9 +119,26 @@ const EChartsGraph = () => {
       chart.dispose();
       window.removeEventListener('resize', resizeHandler);
     };
-  }, []);
+  }, [nodes]);
 
-  return <div ref={chartRef} style={{ width: "100%", height: "800px" }} />;
+  const handleSaveNode = (updatedNode) => {
+    setNodes(prevNodes => prevNodes.map(node => 
+      node.id === updatedNode.id ? updatedNode : node
+    ));
+  };
+
+  return (
+    <>
+      <div ref={chartRef} style={{ width: "100%", height: "800px" }} />
+      <EditNodeModal 
+        node={selectedNode || {}}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveNode}
+        groups={groups}
+      />
+    </>
+  );
 };
 
 export default EChartsGraph;

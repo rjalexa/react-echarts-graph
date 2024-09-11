@@ -10,47 +10,48 @@
   --default-color: #999999;
 }
 
-/* Reset some basic elements */
-body, h1, h2, h3, p {
-  margin: 0;
-  padding: 0;
+/* Existing styles... */
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #f4f4f4;
-}
-
-.App {
-  max-width: 1200px;
-  margin: 0 auto;
+.modal-content {
+  background-color: white;
   padding: 20px;
+  border-radius: 5px;
+  width: 300px;
 }
 
-h1 {
-  color: #2c3e50;
-  text-align: center;
-  margin-bottom: 20px;
+.modal-content h2 {
+  margin-top: 0;
 }
 
-/* Add some basic styling for the ECharts container */
-.echarts-container {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+.modal-content label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 5px;
+}
+
+.modal-actions {
   margin-top: 20px;
+  text-align: right;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .App {
-    padding: 10px;
-  }
-  
-  h1 {
-    font-size: 24px;
-  }
+.modal-actions button {
+  margin-left: 10px;
 }
