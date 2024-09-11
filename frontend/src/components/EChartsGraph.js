@@ -8,6 +8,7 @@ import EditLinkModal from './EditLinkModal';
 const EChartsGraph = () => {
   const chartRef = useRef(null);
   const [nodes, setNodes] = useState(initialNodes);
+  const [links, setLinks] = useState(initialLinks);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLink, setSelectedLink] = useState(null);
@@ -130,7 +131,7 @@ const EChartsGraph = () => {
       chart.dispose();
       window.removeEventListener('resize', resizeHandler);
     };
-  }, [nodes]);
+  }, [nodes, links]);
 
   const handleSaveNode = (updatedNode) => {
     setNodes(prevNodes => prevNodes.map(node => 
@@ -139,12 +140,9 @@ const EChartsGraph = () => {
   };
 
   const handleSaveLink = (updatedLink) => {
-    setNodes(prevNodes => {
-      const newLinks = links.map(link => 
-        link.source === updatedLink.source && link.target === updatedLink.target ? updatedLink : link
-      );
-      return [...prevNodes];
-    });
+    setLinks(prevLinks => prevLinks.map(link => 
+      link.source === updatedLink.source && link.target === updatedLink.target ? updatedLink : link
+    ));
   };
 
   return (
