@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
+import { nodes, links } from '../data/graphData';
 
 const EChartsGraph = () => {
   const chartRef = useRef(null);
@@ -40,14 +41,8 @@ const EChartsGraph = () => {
             show: true,
             formatter: "{c}",
           },
-          data: [
-            { id: "http://mema.ma/Guido_Vetere", name: "Guido", itemStyle: { color: "#ff7f50" } },
-            { id: "http://mema.ma/Matteo_Bacci",name: "Matteo", itemStyle: { color: "#87cefa" } },
-          ],
-          links: [
-            { source: "http://mema.ma/Guido_Vetere", target: "http://mema.ma/Matteo_Bacci", value: "Non sopporta" },
-            { source: "http://mema.ma/Matteo_Bacci", target: "http://mema.ma/Guido_Vetere", value: "Percula" },
-          ],
+          data: nodes,
+          links: links,
           lineStyle: {
             opacity: 0.9,
             width: 2,
