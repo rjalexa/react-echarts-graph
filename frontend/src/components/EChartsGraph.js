@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
-import { nodes as initialNodes, links } from '../data/graphData';
+import { nodes as initialNodes, links as initialLinks } from '../data/graphData';
 import '../App.css';
 import EditNodeModal from './EditNodeModal';
 import EditLinkModal from './EditLinkModal';
