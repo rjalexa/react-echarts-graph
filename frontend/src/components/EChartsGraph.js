@@ -162,8 +162,7 @@ const EChartsGraph = () => {
             links: links.map(link => ({
               ...link,
               lineStyle: {
-                opacity: nodes.find(n => n.id === link.source).group === hoveredGroup ||
-                         nodes.find(n => n.id === link.target).group === hoveredGroup ? 0.7 : 0.1
+                opacity: 0.1
               }
             }))
           }]
