@@ -2,7 +2,7 @@
 
 export const nodes = [{ id: 'alice', name: 'Alice', group: 'employee' },
   { id: 'bob', name: 'Bob', group: 'employee' },
-  { id: 'carol', name: 'Carol', group: 'employee' },
+  { id: 'carol', name: 'Carolina', group: 'employee' },
   { id: 'dave', name: 'Dave', group: 'employee' },
   { id: 'coffee_machine', name: 'Coffee', group: 'resource' },
   { id: 'printer', name: 'Stampante', group: 'resource' },
