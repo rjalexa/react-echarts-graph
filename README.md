@@ -35,8 +35,8 @@ project-root/
 Before you begin, ensure you have met the following requirements:
 
 - Node.js (v12 or higher)
-- npm (v6 or higher)
-- Python (v3.8 or higher)
+- pnpm (v9 or higher)
+- Python (v3.8 to 3.11) NB Currently 3.12 will break the backend for an incompatibility of the js2py library)
 - Poetry (for managing Python dependencies)
 
 ## Installation
@@ -50,7 +50,7 @@ Before you begin, ensure you have met the following requirements:
 2. Set up the frontend:
    ```
    cd frontend
-   npm install
+   pnpm install
    ```
 
 3. Set up the backend:
@@ -71,7 +71,7 @@ Before you begin, ensure you have met the following requirements:
 2. In a new terminal, start the frontend development server:
    ```
    cd frontend
-   npm start
+   pnpm start
    ```
 
 3. Open your web browser and visit:

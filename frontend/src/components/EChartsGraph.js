@@ -7,14 +7,38 @@ import EditLinkModal from './EditLinkModal';
 
 const EChartsGraph = () => {
   const chartRef = useRef(null);
-  const [nodes, setNodes] = useState(initialNodes);
-  const [links, setLinks] = useState(initialLinks);
+  const [nodes, setNodes] = useState([]);
+  const [links, setLinks] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLink, setSelectedLink] = useState(null);
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const groups = useMemo(() => [...new Set(initialNodes.map(node => node.group))], []);
-  const [selectedGroups, setSelectedGroups] = useState(groups);
+  const [isUsingLocalData, setIsUsingLocalData] = useState(false);
+  const groups = useMemo(() => [...new Set(nodes.map(node => node.group))], [nodes]);
+  const [selectedGroups, setSelectedGroups] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/graph');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setNodes(data.nodes);
+        setLinks(data.links);
+        setSelectedGroups([...new Set(data.nodes.map(node => node.group))]);
+      } catch (error) {
+        console.warn('Failed to fetch data from backend, using local data:', error);
+        setNodes(initialNodes);
+        setLinks(initialLinks);
+        setSelectedGroups([...new Set(initialNodes.map(node => node.group))]);
+        setIsUsingLocalData(true);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const chart = echarts.init(chartRef.current);
@@ -205,6 +229,14 @@ const EChartsGraph = () => {
 
   const handleSaveNode = async (updatedNode) => {
     try {
+      if (isUsingLocalData) {
+        setNodes(prevNodes => prevNodes.map(node => 
+          node.id === updatedNode.id ? updatedNode : node
+        ));
+        console.log('Node saved locally');
+        return;
+      }
+
       console.log('Attempting to save node:', updatedNode);
       const response = await fetch('http://localhost:8000/api/nodeSave', {
         method: 'POST',
@@ -234,6 +266,14 @@ const EChartsGraph = () => {
 
   const handleSaveLink = async (updatedLink) => {
     try {
+      if (isUsingLocalData) {
+        setLinks(prevLinks => prevLinks.map(link => 
+          link.source === updatedLink.source && link.target === updatedLink.target ? updatedLink : link
+        ));
+        console.log('Link saved locally');
+        return;
+      }
+
       console.log('Attempting to save edge:', updatedLink);
       const response = await fetch('http://localhost:8000/api/edgeSave', {
         method: 'POST',
@@ -264,6 +304,11 @@ const EChartsGraph = () => {
   return (
     <>
       <div ref={chartRef} style={{ width: "100%", height: "90vh" }} />
+      {isUsingLocalData && (
+        <div style={{ position: 'absolute', top: 10, right: 10, background: 'yellow', padding: 5 }}>
+          Using local data
+        </div>
+      )}
       <EditNodeModal 
         node={selectedNode || {}}
         isOpen={isModalOpen}
