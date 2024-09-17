@@ -127,6 +127,7 @@ const EChartsGraph = () => {
         {
           type: "graph",
           layout: "force",
+          legendHoverLink: false,
           force: {
             repulsion: 1500,
             gravity: 0.05,
@@ -190,18 +191,14 @@ const EChartsGraph = () => {
       updateChartVisibility(newSelectedGroups);
     });
 
-    chart.on('mouseover', { seriesIndex: 0 }, function (params) {
-      if (params.componentType === 'legend') {
-        updateChartVisibility(selectedGroups, params.name);
-      }
+    chart.on('highlight', function (params) {
+      updateChartVisibility(selectedGroups, params.name);
     });
 
-    chart.on('mouseout', { seriesIndex: 0 }, function (params) {
-      if (params.componentType === 'legend') {
-        updateChartVisibility(selectedGroups);
-      }
+    chart.on('downplay', function (params) {
+      updateChartVisibility(selectedGroups);
     });
-
+  
     chart.on('dblclick', (params) => {
       if (params.dataType === 'node') {
         setSelectedNode(params.data);
